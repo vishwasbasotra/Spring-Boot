@@ -5,9 +5,9 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- bean definitions here -->
-    <bean id="specification" class="springBasics.autowire.byName.Specification">
+    <bean id="specification" class="springBasics.autowire.constructor.Specification">
         <property name="make" value="Toyota"/>
         <property name="model" value="Camry"/>
     </bean>
-    <bean id="myCar" class="springBasics.autowire.byName.Car" autowire="byName"/>
+    <bean id="myCar" class="springBasics.autowire.constructor.Car" autowire="constructor"/>
 </beans>
