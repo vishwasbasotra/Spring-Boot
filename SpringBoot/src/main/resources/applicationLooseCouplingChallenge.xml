@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean definitions here -->
+    <bean id="newDatabaseProvider" class="springBasics.dependencyInjection.challenge.NewDatabaseProvider"/>
+    <bean id="userDatabaseProvider" class="springBasics.dependencyInjection.challenge.UserDatabaseProvider"/>
+    <bean id="webServiceDataProvider" class="springBasics.dependencyInjection.challenge.WebServiceDataProvider"/>
+    <bean id="userManagerNewDatabaseProvider" class="springBasics.dependencyInjection.challenge.UserManager">
+        <constructor-arg ref="newDatabaseProvider"/>
+    </bean>
+    <bean id="userManagerUserDatabaseProvider" class="springBasics.dependencyInjection.challenge.UserManager">
+        <constructor-arg ref="userDatabaseProvider"/>
+    </bean>
+    <bean id="userManagerWebServiceDataProvider" class="springBasics.dependencyInjection.challenge.UserManager">
+        <constructor-arg ref="webServiceDataProvider"/>
+    </bean>
+</beans>
