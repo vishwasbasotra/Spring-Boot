@@ -22,8 +22,11 @@ public class CategoryServiceImplementation implements CategoryService{
 
     @Override
     public String deleteCategory(String categoryId) {
-    Category category = categoryList.stream().filter(c -> c.getCategoryId().equals(categoryId)).findFirst().orElse(null);
-    if(category == null)    return "Category '"+categoryId+"' not found!!!";
-    return "Deleted Category: '"+categoryId+"' Successfully!!!";
+        Category category = categoryList.stream().filter(c -> c.getCategoryId().equals(categoryId)).findFirst().orElse(null);
+        if (category == null) return "Category '" + categoryId + "' not found!!!";
+        else {
+            categoryList.remove(category);
+            return "Deleted Category: '" + categoryId + "' Successfully!!!";
+        }
     }
 }
