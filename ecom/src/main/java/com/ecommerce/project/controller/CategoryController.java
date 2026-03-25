@@ -19,7 +19,8 @@ public class CategoryController {
     }
 
     @PostMapping("/api/admin/categories")
-    public String createCategory(@RequestBody String category){
-        return "New Category Created: "+ category;
+    public String createCategory(@RequestBody Category category){
+        categoryList.add(category);
+        return "New Category Created Successfully";
     }
 }
