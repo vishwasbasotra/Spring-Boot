@@ -19,4 +19,16 @@ public class CategoryServiceImplementation implements CategoryService{
     public void createNewCategory(Category category) {
         categoryList.add(category);
     }
+
+    @Override
+    public void deleteCategory(String categoryId) {
+        for(Category category: categoryList){
+            if(category.getCategoryId().equals(categoryId)) categoryList.remove(category);
+        }
+    }
+
+    @Override
+    public void deleteCategory() {
+        categoryList.removeLast();
+    }
 }
