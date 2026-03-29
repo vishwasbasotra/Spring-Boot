@@ -3,22 +3,22 @@ package com.ecommerce.project.model;
 
 public class Category {
     private static long categoryCount = 1;
-    private String categoryId;
+    private Long categoryId;
     private String categoryName;
 
     public Category() {
     }
 
     public Category(String categoryName) {
-        this.categoryId = "Category-"+categoryCount++;
+        this.categoryId = categoryCount++;
         this.categoryName = categoryName;
     }
 
-    public String getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
