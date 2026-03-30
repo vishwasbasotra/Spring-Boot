@@ -1,16 +1,23 @@
-package com.ecommerce.project.model;
+package com.ecommerce.project.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity(name = "Category")
 public class Category {
-    private static long categoryCount = 1;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long categoryId;
+
     private String categoryName;
 
     public Category() {
     }
 
     public Category(String categoryName) {
-        this.categoryId = categoryCount++;
         this.categoryName = categoryName;
     }
 

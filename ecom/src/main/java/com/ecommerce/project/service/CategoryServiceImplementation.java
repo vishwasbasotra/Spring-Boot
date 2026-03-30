@@ -1,9 +1,8 @@
 package com.ecommerce.project.service;
 
-import com.ecommerce.project.model.Category;
+import com.ecommerce.project.entity.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
