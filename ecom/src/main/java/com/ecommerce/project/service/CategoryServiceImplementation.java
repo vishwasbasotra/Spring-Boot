@@ -30,10 +30,12 @@ public class CategoryServiceImplementation implements CategoryService{
 
     @Override
     public String deleteCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+
+        Category foundCategory = optionalCategory
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found!!!"));
 
-        categoryRepository.delete(category);
+        categoryRepository.delete(foundCategory);
         return "Deleted Category: '" + categoryId + "' Successfully!!!";
     }
 
