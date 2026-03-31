@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
     private String categoryName;
@@ -17,7 +17,8 @@ public class Category {
     public Category() {
     }
 
-    public Category(String categoryName) {
+    public Category(Long categoryId, String categoryName) {
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
 
