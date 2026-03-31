@@ -30,11 +30,7 @@ public class CategoryServiceImplementation implements CategoryService{
 
     @Override
     public String deleteCategory(Long categoryId) {
-        List<Category> categoryList = getAllCategories();
-
-        Category category = categoryList.stream()
-                .filter(c -> c.getCategoryId().equals(categoryId))
-                .findFirst()
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found!!!"));
 
         categoryRepository.delete(category);
@@ -43,17 +39,17 @@ public class CategoryServiceImplementation implements CategoryService{
 
     @Override
     public String updateCategory(Category category, Long categoryId) {
-        List<Category> categoryList = getAllCategories();
 
-        Optional<Category> optionalCategory = categoryList.stream()
-                .filter(c -> c.getCategoryId().equals(categoryId))
-                .findFirst();
+        // 1. Directly find the category or throw the exception if empty
+        Category existingCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found!!!"));
 
-        if(optionalCategory.isPresent()){
-            Category existingCategory = optionalCategory.get();
-            existingCategory.setCategoryName(category.getCategoryName());
-            categoryRepository.save(existingCategory);
-            return "Category '"+categoryId+"' updated successfully";
-        }else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found!!!");
+        // 2. Update the fields
+        existingCategory.setCategoryName(category.getCategoryName());
+
+        // 3. Save the managed entity (JPA performs an UPDATE here)
+        categoryRepository.save(existingCategory);
+
+        return "Category '"+categoryId+"' updated successfully";
     }
 }
