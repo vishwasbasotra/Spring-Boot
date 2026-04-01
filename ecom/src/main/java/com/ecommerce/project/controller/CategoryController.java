@@ -2,9 +2,11 @@ package com.ecommerce.project.controller;
 
 import com.ecommerce.project.entity.Category;
 import com.ecommerce.project.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,9 +25,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
+
     @PostMapping("/admin/categories")
     //@RequestMapping(value = "/admin/categories", method = RequestMethod.POST)
-    public ResponseEntity<String> createCategory(@RequestBody Category category){
+    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category){
         categoryService.createNewCategory(category);
         return new ResponseEntity<>("New Category Created Successfully", HttpStatus.CREATED);
     }
