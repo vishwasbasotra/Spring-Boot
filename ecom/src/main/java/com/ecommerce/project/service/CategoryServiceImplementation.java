@@ -1,13 +1,12 @@
 package com.ecommerce.project.service;
 
 import com.ecommerce.project.entity.Category;
+import com.ecommerce.project.exceptions.APIException;
+import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +19,15 @@ public class CategoryServiceImplementation implements CategoryService{
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        List<Category> categoryList= categoryRepository.findAll();
+        if(categoryList.isEmpty())  throw new APIException("Category doesn't exist yet!");
+        return categoryList;
     }
 
     @Override
     public void createNewCategory(Category category) {
+        Category savedCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+        if(savedCategory != null)   throw new APIException("Category '"+category.getCategoryName()+"' already exist!");
         categoryRepository.save(category);
     }
 
@@ -33,7 +36,7 @@ public class CategoryServiceImplementation implements CategoryService{
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
 
         Category foundCategory = optionalCategory
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found!!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
 
         categoryRepository.delete(foundCategory);
         return "Deleted Category: '" + categoryId + "' Successfully!!!";
@@ -44,7 +47,7 @@ public class CategoryServiceImplementation implements CategoryService{
 
         // 1. Directly find the category or throw the exception if empty
         Category existingCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found!!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
 
         // 2. Update the fields
         existingCategory.setCategoryName(category.getCategoryName());
