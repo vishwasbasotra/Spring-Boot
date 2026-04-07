@@ -1,6 +1,8 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.entity.Category;
+import com.ecommerce.project.payload.CategoryDTO;
+import com.ecommerce.project.payload.CategoryResponse;
 import com.ecommerce.project.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,15 @@ public class CategoryController {
 
     @GetMapping("/public/categories")
     //@RequestMapping(value = "/public/categories", method = RequestMethod.GET)
-    public ResponseEntity<List<Category>> getAllCategories(){
+    public ResponseEntity<CategoryResponse> getAllCategories(){
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
 
     @PostMapping("/admin/categories")
     //@RequestMapping(value = "/admin/categories", method = RequestMethod.POST)
-    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category){
-        categoryService.createNewCategory(category);
+    public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
+        categoryService.createNewCategory(categoryDTO);
         return new ResponseEntity<>("New Category Created Successfully", HttpStatus.CREATED);
     }
 
@@ -44,8 +46,8 @@ public class CategoryController {
 
     @PutMapping("/admin/categories/{categoryId}")
     //@RequestMapping(value = "/admin/categories/{categoryId}", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateCategory(@Valid @RequestBody Category category, @PathVariable Long categoryId){
-        String status = categoryService.updateCategory(category, categoryId);
+    public ResponseEntity<String> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
+        String status = categoryService.updateCategory(categoryDTO, categoryId);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 }
