@@ -52,26 +52,27 @@ public class CategoryServiceImplementation implements CategoryService{
     }
 
     @Override
-    public void createNewCategory(CategoryDTO categoryDTO) {
+    public CategoryDTO createNewCategory(CategoryDTO categoryDTO) {
         Category category = toEntity(categoryDTO);
-        Category savedCategory = categoryRepository.findByCategoryName(category.getCategoryName());
-        if(savedCategory != null)   throw new APIException("Category '"+category.getCategoryName()+"' already exist!");
-        categoryRepository.save(category);
+        Category exsistingCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+        if(exsistingCategory != null)   throw new APIException("Category '"+category.getCategoryName()+"' already exist!");
+        Category savedCategory = categoryRepository.save(category);
+        return mapToDTO(savedCategory);
     }
 
     @Override
-    public String deleteCategory(Long categoryId) {
+    public CategoryDTO deleteCategory(Long categoryId) {
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
 
         Category foundCategory = optionalCategory
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
 
         categoryRepository.delete(foundCategory);
-        return "Deleted Category: '" + categoryId + "' Successfully!!!";
+        return mapToDTO(foundCategory);
     }
 
     @Override
-    public String updateCategory(CategoryDTO categoryDTO, Long categoryId) {
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId) {
 
         // 1. Convert CategoryDTO to Category entity
         Category category = toEntity(categoryDTO);
@@ -84,8 +85,8 @@ public class CategoryServiceImplementation implements CategoryService{
         existingCategory.setCategoryName(category.getCategoryName());
 
         // 4. Save the managed entity (JPA performs an UPDATE here)
-        categoryRepository.save(existingCategory);
+        Category updatedCategory = categoryRepository.save(existingCategory);
 
-        return "Category '"+categoryId+"' updated successfully";
+        return mapToDTO(updatedCategory);
     }
 }
