@@ -45,9 +45,12 @@ public class CategoryServiceImplementation implements CategoryService{
     }
 
     @Override
-    public CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize) {
+    public CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
         Page<Category> categoryPage = categoryRepository.findAll(pageDetails);
         List<Category> categoryList= categoryPage.getContent();
 
@@ -58,6 +61,7 @@ public class CategoryServiceImplementation implements CategoryService{
                 .toList();
 
         CategoryResponse categoryResponse = new CategoryResponse();
+
         categoryResponse.setContent(categoryDTOList);
         categoryResponse.setPageNumber(categoryPage.getNumber());
         categoryResponse.setPageSize(categoryPage.getSize());
