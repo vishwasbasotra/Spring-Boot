@@ -2,15 +2,9 @@ package com.socialMedia.service;
 
 import com.socialMedia.model.SocialUser;
 import com.socialMedia.repository.SocialUserRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -26,6 +20,17 @@ public class SocialService {
     }
 
     public SocialUser createUser(SocialUser socialUser) {
+        if (socialUser.getSocialProfile() != null) {
+            socialUser.getSocialProfile().setUser(socialUser);
+        }
         return socialUserRepository.save(socialUser);
+    }
+
+    public SocialUser deleteUser(Long userId) {
+        SocialUser socialUser = socialUserRepository
+                .findById(userId)
+                .orElseThrow(() -> new RuntimeException("User Not Found!!!"));
+        socialUserRepository.delete(socialUser);
+        return socialUser;
     }
 }

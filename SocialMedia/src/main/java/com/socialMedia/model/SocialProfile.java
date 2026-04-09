@@ -1,5 +1,6 @@
 package com.socialMedia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,17 @@ public class SocialProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "socialProfile")
-    private SocialUser socialUser;
+    @OneToOne
+    @JoinColumn(name = "Social_User")
+    @JsonIgnore
+    private SocialUser user;
+
+    private String description;
+
+    public void setSocialUser(SocialUser socialUser) {
+        this.user = socialUser;
+        if(user.getSocialProfile() != this){
+            user.setSocialProfile(this);
+        }
+    }
 }

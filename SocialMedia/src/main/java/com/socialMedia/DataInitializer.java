@@ -88,15 +88,14 @@ public class DataInitializer {
             SocialProfile socialProfile3 = new SocialProfile();
 
             // associating profiles with the users
-            socialProfile1.setSocialUser(user1);
-            socialProfile2.setSocialUser(user2);
-            socialProfile3.setSocialUser(user3);
+            socialProfile1.setUser(user1);
+            socialProfile2.setUser(user2);
+            socialProfile3.setUser(user3);
 
             // saving social profile to the db
             socialProfileRepository.save(socialProfile1);
             socialProfileRepository.save(socialProfile2);
             socialProfileRepository.save(socialProfile3);
-
         });
     }
 }
