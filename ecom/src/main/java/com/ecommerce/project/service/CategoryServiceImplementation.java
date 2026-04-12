@@ -1,6 +1,6 @@
 package com.ecommerce.project.service;
 
-import com.ecommerce.project.entity.Category;
+import com.ecommerce.project.model.Category;
 import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.payload.CategoryDTO;
@@ -25,8 +25,8 @@ public class CategoryServiceImplementation implements CategoryService{
 
     // Map: Entity -> DTO
     private CategoryDTO mapToDTO(Category category){
-
         CategoryDTO categoryDTO = new CategoryDTO();
+
         categoryDTO.setCategoryId(category.getCategoryId());
         categoryDTO.setCategoryName(category.getCategoryName());
 

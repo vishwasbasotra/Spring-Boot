@@ -30,23 +30,18 @@ public class CategoryController {
 
 
     @PostMapping("/admin/categories")
-    //@RequestMapping(value = "/admin/categories", method = RequestMethod.POST)
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
         CategoryDTO newCategoryDTO = categoryService.createNewCategory(categoryDTO);
-        return new ResponseEntity<>(categoryDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(newCategoryDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/admin/categories/{categoryId}")
-    //@RequestMapping(value = "/admin/categories/{categoryId}", method = RequestMethod.DELETE)
     public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId){
         CategoryDTO deletedCategoryDTO = categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(deletedCategoryDTO, HttpStatus.OK);
-        //return ResponseEntity.ok(status);
-//        return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 
     @PutMapping("/admin/categories/{categoryId}")
-    //@RequestMapping(value = "/admin/categories/{categoryId}", method = RequestMethod.PUT)
     public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId){
         CategoryDTO updatedCategoryDTO = categoryService.updateCategory(categoryDTO, categoryId);
         return new ResponseEntity<>(updatedCategoryDTO, HttpStatus.OK);
