@@ -60,6 +60,32 @@ public class ProductServiceImplementation implements ProductService{
     }
 
     @Override
+    public ProductResponse getProductsByCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryID", categoryId));
+
+        List<Product> productsList = productRepository.findByCategoryOrderByPriceAsc(category);
+        List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(productDTOList);
+
+        return productResponse;
+    }
+
+    @Override
+    public ProductResponse getProductsByKeyword(String keyword) {
+
+        List<Product> productsList = productRepository.findByProductNameLikeIgnoreCase("%"+keyword+"%");
+        List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(productDTOList);
+
+        return productResponse;
+    }
+
+    @Override
     public ProductDTO addProduct(ProductDTO productDTO, Long categoryId) {
         Product product = dtoToEntity(productDTO);
         Category category = categoryRepository.findById(categoryId)
