@@ -1,15 +1,10 @@
 package com.ecommerce.project.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
+import java.util.List;
 @Entity(name = "Category")
 @Data
 @NoArgsConstructor
@@ -24,4 +19,6 @@ public class Category {
     @Size(min=2, max = 20, message = "Name should be 2 to 20 characters.")
     private String categoryName;
 
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Product> productList;
 }
