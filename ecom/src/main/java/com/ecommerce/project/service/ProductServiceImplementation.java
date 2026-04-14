@@ -120,12 +120,20 @@ public class ProductServiceImplementation implements ProductService{
     }
 
     @Override
-    public ProductResponse getProductsByCategory(Long categoryId) {
+    public ProductResponse getProductsByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryID", categoryId));
 
-        List<Product> productsList = productRepository.findByCategoryOrderByPriceAsc(category);
+        Sort sortByAndOrder = (sortBy.equalsIgnoreCase("asc"))
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> productPage = productRepository.findByCategoryOrderByPriceAsc(category, pageDetails);
+
+        List<Product> productsList = productPage.getContent();
 
         if(productsList.isEmpty()){
             throw new APIException("Products does not exist yet");
@@ -135,14 +143,27 @@ public class ProductServiceImplementation implements ProductService{
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOList);
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setTotalPages(productPage.getTotalPages());
+        productResponse.setTotalElements(productPage.getTotalElements());
+        productResponse.setPageSize(productPage.getSize());
+        productResponse.setLastPage(productPage.isLast());
 
         return productResponse;
     }
 
     @Override
-    public ProductResponse getProductsByKeyword(String keyword) {
+    public ProductResponse getProductsByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        List<Product> productsList = productRepository.findByProductNameLikeIgnoreCase("%"+keyword+"%");
+        Sort sortByAndOrder = (sortBy.equalsIgnoreCase("asc"))
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> productPage = productRepository.findByProductNameLikeIgnoreCase("%"+keyword+"%", pageDetails);
+
+        List<Product> productsList = productPage.getContent();
 
         if(productsList.isEmpty()){
             throw new APIException("Products does not exist yet");
@@ -151,7 +172,13 @@ public class ProductServiceImplementation implements ProductService{
         List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
 
         ProductResponse productResponse = new ProductResponse();
+
         productResponse.setContent(productDTOList);
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setTotalPages(productPage.getTotalPages());
+        productResponse.setTotalElements(productPage.getTotalElements());
+        productResponse.setPageSize(productPage.getSize());
+        productResponse.setLastPage(productPage.isLast());
 
         return productResponse;
     }
