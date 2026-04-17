@@ -35,13 +35,13 @@ public class GreetingsController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @GetMapping("/helloUser")
+    @GetMapping("/user")
     public String helloUser(){
         return "Hello User!";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/helloAdmin")
+    @GetMapping("/admin")
     public String helloAdmin(){
         return "Hello Admin!";
     }
@@ -71,8 +71,8 @@ public class GreetingsController {
                 .collect((Collectors.toList()));
 
         LoginResponse loginResponse = new LoginResponse(
-                userDetails.getUsername(),
                 jwtToken,
+                userDetails.getUsername(),
                 roles
         );
         return ResponseEntity.ok(loginResponse);

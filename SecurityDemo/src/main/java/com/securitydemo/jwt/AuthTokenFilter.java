@@ -19,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter; // The specialized b
 
 import java.io.IOException; // standard Java I/O exception.
 
-// Marks this class as a Spring Bean.
 @Component
 
 // Extends OncePerRequestFilter, confirming its role as a fundamental security filter
