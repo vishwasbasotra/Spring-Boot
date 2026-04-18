@@ -2,15 +2,13 @@ package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -42,6 +40,6 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "SellerID")
+    @JoinColumn(name = "seller_id")
     private User user;
 }
