@@ -136,7 +136,7 @@ public class ProductServiceImplementation implements ProductService{
         List<Product> productsList = productPage.getContent();
 
         if(productsList.isEmpty()){
-            throw new APIException("Products does not exist yet");
+            throw new APIException("Products does not exist yet in the Category ID: '"+categoryId+"'");
         }
 
         List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
@@ -166,7 +166,7 @@ public class ProductServiceImplementation implements ProductService{
         List<Product> productsList = productPage.getContent();
 
         if(productsList.isEmpty()){
-            throw new APIException("Products does not exist yet");
+            throw new APIException("Products does not exist with the keyword: '"+keyword+"'");
         }
 
         List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
