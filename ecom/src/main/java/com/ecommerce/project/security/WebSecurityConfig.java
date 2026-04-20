@@ -45,6 +45,7 @@ public class WebSecurityConfig {
         return daoAuthenticationProvider;
     }
 
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig){
         return authConfig.getAuthenticationManager();
     }
