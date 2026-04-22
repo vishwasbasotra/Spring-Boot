@@ -1,7 +1,6 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.enums.AppRole;
-import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.User;
 import com.ecommerce.project.repository.RoleRepository;
@@ -25,11 +24,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/api/auth")
 public class AuthenticationController  {
 
     @Autowired
@@ -81,12 +82,12 @@ public class AuthenticationController  {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid SignupRequest signupRequest){
-        if(userRepository.existsByUserName(signupRequest.getUsername())){
+        if(userRepository.existsByUsername(signupRequest.getUsername())){
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: username is already taken!"));
         }
-        if(userRepository.existsByUserName(signupRequest.getEmail())){
+        if(userRepository.existsByEmail(signupRequest.getEmail())){
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: email is already taken!"));
@@ -97,24 +98,24 @@ public class AuthenticationController  {
         Set<String> strRoles = signupRequest.getRole();
         Set<Role> roleSet = new HashSet<>();
         if(signupRequest.getRole() == null){
-            Role role = roleRepository.findByRole(AppRole.USER)
+            Role role = roleRepository.findByRoleName(AppRole.USER)
                     .orElseThrow(() -> new RuntimeException("Role is not found!"));
             roleSet.add(role);
         }else{
             strRoles.forEach(role -> {
                 switch (role){
                     case "admin":
-                        Role adminRole = roleRepository.findByRole(AppRole.ADMIN)
+                        Role adminRole = roleRepository.findByRoleName(AppRole.ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Role is not found!"));
                         roleSet.add(adminRole);
                         break;
                     case "seller":
-                        Role sellerRole = roleRepository.findByRole(AppRole.SELLER)
+                        Role sellerRole = roleRepository.findByRoleName(AppRole.SELLER)
                                 .orElseThrow(() -> new RuntimeException("Role is not found!"));
                         roleSet.add(sellerRole);
                         break;
                     default:
-                        Role userRole = roleRepository.findByRole(AppRole.USER)
+                        Role userRole = roleRepository.findByRoleName(AppRole.USER)
                                 .orElseThrow(() -> new RuntimeException("Role is not found!"));
                         roleSet.add(userRole);
                 }
