@@ -16,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -54,7 +53,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig){
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
@@ -72,6 +71,7 @@ public class WebSecurityConfig {
                         .requestMatchers( "/v3/api-docs/**").permitAll()
                         .requestMatchers( "/api/auth/**").permitAll()
                         .requestMatchers( "/api/public/**").permitAll()
+                        .requestMatchers( "/error").permitAll()
 //                        .requestMatchers( "/api/admin/**").permitAll()
                         .requestMatchers( "/api/test/**").permitAll()
                         .requestMatchers( "/images/**").permitAll()

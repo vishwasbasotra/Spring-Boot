@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends Exception {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> myMethodArgumentNotValidException(MethodArgumentNotValidException exception){
@@ -37,5 +37,12 @@ public class GlobalExceptionHandler extends Exception {
         String message = exception.getMessage();
         APIResponse apiResponse = new APIResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<APIResponse> genericException(Throwable exception){
+        String message = exception.getClass().getSimpleName() + ": " + exception.getMessage();
+        APIResponse apiResponse = new APIResponse(message, false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
