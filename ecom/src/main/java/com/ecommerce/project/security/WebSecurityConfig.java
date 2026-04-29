@@ -72,7 +72,7 @@ public class WebSecurityConfig {
                         .requestMatchers( "/v3/api-docs/**").permitAll()
                         .requestMatchers( "/api/auth/**").permitAll()
                         .requestMatchers( "/api/public/**").permitAll()
-                        .requestMatchers( "/api/admin/**").permitAll()
+//                        .requestMatchers( "/api/admin/**").permitAll()
                         .requestMatchers( "/api/test/**").permitAll()
                         .requestMatchers( "/images/**").permitAll()
                         .anyRequest()
