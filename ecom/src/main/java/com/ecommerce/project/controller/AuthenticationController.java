@@ -23,10 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,6 +72,7 @@ public class AuthenticationController  {
 
         UserInfoResponse loginResponse = new UserInfoResponse(
                 userDetails.getId(),
+                jwtCookie.getValue(),
                 userDetails.getUsername(),
                 roles
         );
@@ -133,5 +131,35 @@ public class AuthenticationController  {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new MessageResponse("Error during registration: " + e.getMessage()));
         }
+    }
+
+    @GetMapping("/username")
+    public String currentUsername(Authentication authentication){
+        if(authentication != null)  return authentication.getName();
+        return "";
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> currentUserDetails(Authentication authentication){
+
+        UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect((Collectors.toList()));
+        UserInfoResponse loginResponse = new UserInfoResponse(
+                userDetails.getId(),
+                userDetails.getUsername(),
+                roles
+        );
+        return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<?> signoutUser(){
+        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new MessageResponse("You've been signed out!"));
     }
 }
