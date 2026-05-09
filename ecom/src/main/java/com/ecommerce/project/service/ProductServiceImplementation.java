@@ -35,7 +35,7 @@ public class ProductServiceImplementation implements ProductService{
     private String path;
 
 
-    private Product dtoToEntity(ProductDTO productDTO){
+    private Product productDtoToProduct(ProductDTO productDTO){
         Product product = new Product();
 
         product.setProductName(productDTO.getProductName());
@@ -47,7 +47,7 @@ public class ProductServiceImplementation implements ProductService{
         return product;
     }
 
-    private ProductDTO entityToDTO(Product product){
+    private ProductDTO productToProductDTO(Product product){
         ProductDTO productDTO = new ProductDTO();
 
         productDTO.setProductId(product.getProductId());
@@ -67,7 +67,7 @@ public class ProductServiceImplementation implements ProductService{
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
-        Product product = dtoToEntity(productDTO);
+        Product product = productDtoToProduct(productDTO);
 
         List<Product> productList = category.getProductList();
 
@@ -89,7 +89,7 @@ public class ProductServiceImplementation implements ProductService{
 
         // save the product
         Product savedProduct = productRepository.save(product);
-        return entityToDTO(savedProduct);
+        return productToProductDTO(savedProduct);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ProductServiceImplementation implements ProductService{
             throw new APIException("Products does not exist yet");
         }
 
-        List<ProductDTO> productDTOS = productList.stream().map(this::entityToDTO).toList();
+        List<ProductDTO> productDTOS = productList.stream().map(this::productToProductDTO).toList();
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOS);
@@ -139,7 +139,7 @@ public class ProductServiceImplementation implements ProductService{
             throw new APIException("Products does not exist yet in the Category ID: '"+categoryId+"'");
         }
 
-        List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
+        List<ProductDTO> productDTOList = productsList.stream().map(this::productToProductDTO).toList();
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOList);
@@ -169,7 +169,7 @@ public class ProductServiceImplementation implements ProductService{
             throw new APIException("Products does not exist with the keyword: '"+keyword+"'");
         }
 
-        List<ProductDTO> productDTOList = productsList.stream().map(this::entityToDTO).toList();
+        List<ProductDTO> productDTOList = productsList.stream().map(this::productToProductDTO).toList();
 
         ProductResponse productResponse = new ProductResponse();
 
@@ -199,7 +199,7 @@ public class ProductServiceImplementation implements ProductService{
         productDTO.setSpecialPrice(specialPrice);
 
         Product savedProduct = productRepository.save(product);
-        return entityToDTO(savedProduct);
+        return productToProductDTO(savedProduct);
     }
 
     @Override
@@ -207,7 +207,7 @@ public class ProductServiceImplementation implements ProductService{
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
         productRepository.delete(product);
-        return entityToDTO(product);
+        return productToProductDTO(product);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class ProductServiceImplementation implements ProductService{
         product.setImage(fileName);
         productRepository.save(product);
 
-        return entityToDTO(product);
+        return productToProductDTO(product);
     }
 
 

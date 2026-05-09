@@ -24,7 +24,7 @@ public class CategoryServiceImplementation implements CategoryService{
     private CategoryRepository categoryRepository;
 
     // Map: Entity -> DTO
-    private CategoryDTO mapToDTO(Category category){
+    private CategoryDTO categoryToCategoryDTO(Category category){
         CategoryDTO categoryDTO = new CategoryDTO();
 
         categoryDTO.setCategoryId(category.getCategoryId());
@@ -34,7 +34,7 @@ public class CategoryServiceImplementation implements CategoryService{
     }
 
     // Map: DTO -> Entity
-    private Category toEntity(CategoryDTO categoryDTO){
+    private Category categoryDtoToCategory(CategoryDTO categoryDTO){
 
         Category category = new Category();
 
@@ -57,7 +57,7 @@ public class CategoryServiceImplementation implements CategoryService{
         if(categoryList.isEmpty())  throw new APIException("Category doesn't exist yet!");
 
         List<CategoryDTO> categoryDTOList = categoryList.stream()
-                .map(this::mapToDTO)
+                .map(this::categoryToCategoryDTO)
                 .toList();
 
         CategoryResponse categoryResponse = new CategoryResponse();
@@ -75,14 +75,14 @@ public class CategoryServiceImplementation implements CategoryService{
     @Override
     public CategoryDTO createNewCategory(CategoryDTO categoryDTO) {
 
-        Category category = toEntity(categoryDTO);
+        Category category = categoryDtoToCategory(categoryDTO);
         Category exsistingCategory = categoryRepository.findByCategoryName(category.getCategoryName());
 
         if(exsistingCategory != null)   throw new APIException("Category '"+category.getCategoryName()+"' already exist!");
 
         Category savedCategory = categoryRepository.save(category);
 
-        return mapToDTO(savedCategory);
+        return categoryToCategoryDTO(savedCategory);
     }
 
     @Override
@@ -94,14 +94,14 @@ public class CategoryServiceImplementation implements CategoryService{
 
         categoryRepository.delete(foundCategory);
 
-        return mapToDTO(foundCategory);
+        return categoryToCategoryDTO(foundCategory);
     }
 
     @Override
     public CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId) {
 
         // 1. Convert CategoryDTO to Category entity
-        Category category = toEntity(categoryDTO);
+        Category category = categoryDtoToCategory(categoryDTO);
 
         // 2. Directly find the category or throw the exception if empty
         Category existingCategory = categoryRepository.findById(categoryId)
@@ -113,6 +113,6 @@ public class CategoryServiceImplementation implements CategoryService{
         // 4. Save the managed entity (JPA performs an UPDATE here)
         Category updatedCategory = categoryRepository.save(existingCategory);
 
-        return mapToDTO(updatedCategory);
+        return categoryToCategoryDTO(updatedCategory);
     }
 }

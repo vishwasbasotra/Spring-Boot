@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "carts")
 public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long cartId;
+    private Long cartId;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -24,5 +26,5 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<CartItem> cartItemList = new ArrayList<>();
 
-    private Double price = 0.0;
+    private Double totalPrice = 0.0;
 }
