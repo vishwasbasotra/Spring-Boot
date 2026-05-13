@@ -145,6 +145,20 @@ public class CartServiceImplementation implements CartService{
         return cartDTOList;
     }
 
+    @Transactional
+    @Override
+    public CartDTO getCartById(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "cartId", cartId));
+
+        CartDTO cartDTO = cartToCartDTO(cart);
+        List<ProductDTO> productDTOList = cart.getCartItemList().stream()
+                .map(cartItem -> productToProductDTO(cartItem.getProduct())).toList();
+        cartDTO.setProducts(productDTOList);
+
+        return cartDTO;
+    }
+
     private Cart createCart(){
         Cart userCart = cartRepository.findCartByEmail(authUtil.loggedInEmail());
         if(userCart != null){
